@@ -45,8 +45,8 @@
     <div class="col-lg-6">
         <h2 class="border_bottom">Other Books With Reviews:</h2>
         <ul class="list-unstyled p-2">
-            {% for review_obj in reviews|slice:"4:" %}
-            <li class="ml-4 mb-2"><a href="{% url 'view_book' review_obj.book.id %}">{{ review_obj.book.title}}</a></li>
+            {% for book_obj in books %}
+            <li class="ml-4 mb-2"><a href="{% url 'view_book' book_obj.id %}">{{ book_obj.title}}</a></li>
             {% endfor %}
         </ul>
     </div>

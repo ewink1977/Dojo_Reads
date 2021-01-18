@@ -72,6 +72,7 @@ def book_reviews(request):
             'page_title': 'Recent Book Reviews!',
             'current_user': Users.objects.get(id = request.session['userid']),
             'reviews': Reviews.objects.all().order_by("-created_at"),
+            'books': Books.objects.all(),
         }
         return render(request, 'html/book_reviews.html', context)
     if request.session['loggedin'] == False:
@@ -119,14 +120,14 @@ def confirm_delete(request, reviewid):
 
 # Book and Review POST Management
 
-def review_existing_book(request):
+def review_existing_book(request, bookid):
     if request.method == 'POST':
         review_errors = Reviews.objects.basic_validation(request.POST)
         if len(review_errors) > 0:
             for key, value in review_errors.items():
                 messages.error(request, value, extra_tags='danger')
                 return redirect('view_book', request.POST['bookid'])
-        book_reviewed = Books.objects.get(id = request.POST['bookid'])
+        book_reviewed = Books.objects.get(id = bookid)
         user_reviewing = Users.objects.get(id = request.session['userid'])
         Reviews.objects.create(
             review = request.POST['bookreview'],
@@ -135,7 +136,7 @@ def review_existing_book(request):
             book = book_reviewed
         )
         messages.success(request, f"Woot! You have reviewed {book_reviewed.title}!")
-        return redirect('view_book', request.POST['bookid'])
+        return redirect('view_book', bookid)
     else:
         messages.error(request, 'Invalid request. Returning you to the main page.', extra_tags = 'danger')
         return redirect('book_reviews')

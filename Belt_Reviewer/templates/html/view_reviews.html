@@ -17,40 +17,41 @@
 <div class="row">
     <div class="col-md-6 ml-1">
         <h2>Reviews:</h2>
+        <div class="reviews">
         {% for review_obj in book_info.reviews.all %}
-        <hr class="seperator">
-        <ul class="list-unstyled ml-3 p-2">
-            {% if review_obj.rating == 1 %}
-            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
-            {% elif review_obj.rating == 2 %}
-            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
-            {% elif review_obj.rating == 3 %}
-            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
-            {% elif review_obj.rating == 4 %}
-            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
-            {% elif review_obj.rating == 5 %}
-            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></li>
-            {% endif %}
-            <li class="mt-1 mb-1 p-1"><a href="{% url 'user_profile' review_obj.user.id %}">{{ review_obj.user.alias }}</a> says: {{ review_obj.review }}</li>
-        </ul>
-        <div class="row justify-content-between">
-            <div class="col-6 ml-5 mb-1 p-1">
-                Posted on {{ review_obj.created_at|date:"M j, Y"}}
+            <hr class="seperator">
+            <ul class="list-unstyled ml-3 p-2">
+                {% if review_obj.rating == 1 %}
+                <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
+                {% elif review_obj.rating == 2 %}
+                <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
+                {% elif review_obj.rating == 3 %}
+                <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
+                {% elif review_obj.rating == 4 %}
+                <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
+                {% elif review_obj.rating == 5 %}
+                <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></li>
+                {% endif %}
+                <li class="mt-1 mb-1 p-1"><a href="{% url 'user_profile' review_obj.user.id %}">{{ review_obj.user.alias }}</a> says: {{ review_obj.review }}</li>
+            </ul>
+            <div class="row justify-content-between">
+                <div class="col-6 ml-5 mb-1 p-1">
+                    Posted on {{ review_obj.created_at|date:"M j, Y"}}
+                </div>
+                {% if user_info.id == review_obj.user.id %}
+                <div class="col-4 mb-1 p-1">
+                    <a href="{% url 'confirm_delete_review' review_obj.id %}">Delete This Review</a>
+                </div>
+                {% endif %}
             </div>
-            {% if user_info.id == review_obj.user.id %}
-            <div class="col-4 mb-1 p-1">
-                <a href="{% url 'confirm_delete_review' review_obj.id %}">Delete This Review</a>
-            </div>
-            {% endif %}
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
     <div class="col-md-5">
         <h2>Add A Review!</h2>
-        <form action="" method="POST">
+        <form action="{% url 'review_book' book_info.id %}" method="POST">
             {% csrf_token %}
             <div class="form-group row">
-                <input type="hidden" name="bookid" value="{{ book_info.id }}">
                 <label for="bookreview" class="col-md-2 col-form-label">Review:</label>
                 <div class="col">
                     <textarea class="form-control" name="bookreview" id="bookreview" rows="6" aria-describedby="ReviewHelp"></textarea>
