@@ -17,3 +17,12 @@ def add_book_review(request):
         'page_title': 'Add A Book & Review!'
     }
     return render(request, 'html/new_book.html', context)
+
+def view_book(request):
+    context = {
+        'page-title': 'BOOK TITLE | Reviews!'
+    }
+    return render(request, 'html/view_reviews.html', context)
+
+def review_existing_book(request):
+    pass

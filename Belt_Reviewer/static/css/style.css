@@ -10,3 +10,10 @@
 iframe.long-frame {
     min-height: 600px;
 }
+
+hr.seperator {
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    background-color: black;
+}
