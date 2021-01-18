@@ -8,6 +8,7 @@
     <div class="col-md-7 border border-dark">
         <p class="form-header-text"><strong>Register</strong></p>
         <form action="" method="POST">
+            {% csrf_token %}
             <div class="form-group row">
                 <label for="name" class="col-sm-4 col-form-label">Name:</label>
                 <div class="col-sm-8">
@@ -49,6 +50,7 @@
     <div class="col-md-5 border border-dark">
         <p class="form-header-text"><strong>Log In</strong></p>
         <form action="" method="POST">
+            {% csrf_token %}
             <div class="form-group row">
                 <label for="email" class="col-sm-2 col-form-label">email:</label>
                 <div class="col-sm-8">

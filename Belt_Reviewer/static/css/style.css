@@ -6,3 +6,7 @@
     border: 1px solid black;
     padding: 2px;
 }
+
+iframe.long-frame {
+    min-height: 600px;
+}
