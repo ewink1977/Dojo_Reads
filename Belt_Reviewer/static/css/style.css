@@ -17,3 +17,10 @@ hr.seperator {
     border-radius: 3px;
     background-color: black;
 }
+
+hr.reviews {
+    width: 100%;
+    height: 3px;
+    border-radius: 1px;
+    background-color: lightslategray;
+}

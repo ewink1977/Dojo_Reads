@@ -2,34 +2,48 @@
 
 {% block content %}
 
+{% if request.session.loggedin == True %}
 <nav class="row align-items-center justify-content-between border-bottom p-1 mb-5">
     <div class="col-sm-4 align-self-center">
-        <h2><strong>Welcome, user.alais</strong></h2>
+        <h2><strong>Welcome, {{ current_user.alias }}</strong></h2>
     </div>
     <div class="col-sm-4 align-self-center">
-        <a href="">Add Book & Review</a> | <a href="">Logout</a>
+        <a href="{% url 'add_book_review' %}">Add Book & Review</a> | <a href="{% url 'logout' %}">Logout</a>
     </div>
 </nav>
+{% else %}
+<nav class="row align-items-center justify-content-between border-bottom p-1 mb-5">
+    <div class="col-sm-6 align-self-center">
+        <h2><strong>Welcome! Log in to add books or reviews!</strong></h2>
+    </div>
+    <div class="col-sm-4 align-self-center">
+        <a href="{% url 'home' %}">Log In</a>
+    </div>
+</nav>
+{% endif %}
 <div class="row">
     <div class="col-lg-6">
-        <h2 class="mt-2 border-bottom">Recent Book Reviews:</h2>
+        <h2 class="mt-2">Recent Book Reviews:</h2>
+        <hr class="reviews">
         <h3 class="ml-3">Book Title Here</h3>
         <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i></p>
         <p class="ml-5"><a href="">USER</a> says: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum aut nobis cumque fugiat, 
             eveniet nihil illum ad omnis natus ullam! Fugit quo nulla inventore quis laboriosam deleniti, sapiente iusto consequuntur.</p>
         <p class="ml-5 mb-2">Posted on DATE</p>
         
-        <h3 class="ml-1">Book Title Here</h3>
-        <p class="ml-2">Rating: STAR STAR STAR</p>
-        <p class="ml-2"><a href="">USER</a> says: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum aut nobis cumque fugiat, 
+        <hr class="reviews">
+        <h3 class="ml-3">Book Title Here</h3>
+        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i></p>
+        <p class="ml-5"><a href="">USER</a> says: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum aut nobis cumque fugiat, 
             eveniet nihil illum ad omnis natus ullam! Fugit quo nulla inventore quis laboriosam deleniti, sapiente iusto consequuntur.</p>
-        <p class="ml-2 mb-2">Posted on DATE</p>
-
-        <h3 class="ml-1">Book Title Here</h3>
-        <p class="ml-2">Rating: STAR STAR STAR</p>
-        <p class="ml-2"><a href="">USER</a> says: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum aut nobis cumque fugiat, 
+        <p class="ml-5 mb-2">Posted on DATE</p>
+        
+        <hr class="reviews">
+        <h3 class="ml-3">Book Title Here</h3>
+        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i></p>
+        <p class="ml-5"><a href="">USER</a> says: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum aut nobis cumque fugiat, 
             eveniet nihil illum ad omnis natus ullam! Fugit quo nulla inventore quis laboriosam deleniti, sapiente iusto consequuntur.</p>
-        <p class="ml-2 mb-2">Posted on DATE</p>
+        <p class="ml-5 mb-2">Posted on DATE</p>
     </div>
     <div class="col-lg-6">
         <h2 class="border_bottom">Other Books With Reviews:</h2>

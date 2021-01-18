@@ -4,24 +4,25 @@ from django.db.models.fields.related import ForeignKey
 import re
 
 class UsersManager(models.Manager):
-    def basic_validator(self, postData):
+    def basic_validation(self, postData):
         errors = {}
         if len(postData['name']) < 5:
             errors['name'] = 'Name needs to be at least 5 characters'
         if len(postData['alias']) < 5:
             errors['alias'] = 'Your alias needs to be at least 5 characters.'
-        try:
-            Users.objects.get(alias = postData['alias'])
-            errors['alias'] = 'Your alias already exists. Alias needs to be unique.'
-        except:
-            pass
+        alias_dup_check = Users.objects.filter(alias = postData['alias'])
+        if alias_dup_check == postData['alias']:
+            errors['alias2'] = 'Your alias already exists. Alias needs to be unique.'
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
         if not EMAIL_REGEX.match(postData['email']):    # test whether a field matches the pattern            
-            errors['email'] = "Invalid email address!"
+            errors['email'] = 'Invalid email address!'
+        emaildupcheck = Users.objects.filter(email=postData['email'])
+        if emaildupcheck == postData['email']:
+            errors['email2'] = 'That email address already exists. Did you forget your password?'
         if len(postData['password']) < 8:
             errors['password'] = 'Your password must be at least 8 characters long.'
-        if not postData['password'] == postData['confirm_password']:
-            errors['password'] = 'Password mismatch. Did you make a typo?'
+        if not postData['confirm_password'] == postData['password']:
+            errors['confirm_password'] = 'Password mismatch. Did you make a typo?'
         return errors
 
 class Users(models.Model):
@@ -68,6 +69,7 @@ class Books(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    objects = BooksManager()
 
 class ReviewsManager(models.Manager):
     def basic_validation(self, postData):
@@ -93,3 +95,4 @@ class Reviews(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    objects = ReviewsManager()
