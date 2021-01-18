@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Users, Authors, Books, Reviews
 import bcrypt
@@ -101,9 +101,13 @@ def view_book(request, bookid):
     }
     return render(request, 'html/view_reviews.html', context)
 
-def view_profile(request):
+def view_profile(request, userid):
+    user_data = Users.objects.get(id = userid)
+    reviews = user_data.reviews.all()
     context = {
-        'page_title': 'USER NAME | Profile!',
+        'page_title': f'{user_data.alias} | Profile!',
+        'user': user_data,
+        'reviews': reviews,
     }
     return render(request, 'html/user_profile.html', context)
 
@@ -135,7 +139,6 @@ def review_existing_book(request):
     else:
         messages.error(request, 'Invalid request. Returning you to the main page.', extra_tags = 'danger')
         return redirect('book_reviews')
-
 
 def process_new_book_review(request):
     if request.method == 'POST':

@@ -6,25 +6,55 @@
     <div class="col-sm-4 align-self-center">
     </div>
     <div class="col-sm-4 align-self-center">
-        <a href="">Home</a> | <a href="">Add Book & Review</a> | <a href="">Logout</a>
+        <a href="{% url 'book_reviews' %}">Home</a> | <a href="{% url 'add_book_review' %}">Add Book & Review</a> | <a href="{% url 'logout' %}">Logout</a>
     </div>
 </nav>
 <div class="row">
     <div class="col-md-12">
-        <h2>User Alais: USER ALAIS</h2>
-        <p>Name: USER NAME</p>
-        <p>email: USER EMAIL</p>
-        <p>Books Reviewed: NUMBER OF REVIEWS</p>
+        <h2>User Alais: {{ user.alias }}</h2>
+        <div class="row">
+            <div class="col-sm-1">
+                <p>Name:</p>
+            </div>
+            <div class="col-sm-5">
+                <p>{{ user.name }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1">
+                <p>email:</p>
+            </div>
+            <div class="col-sm-5">
+                <p>{{ user.email }}</p>
+            </div>
+        </div>
+        {% if reviews %}
+        <div class="row">
+            <div class="col-sm-1">
+                <p>Books Reviewed:</p>
+            </div>
+            <div class="col-sm-5">
+                <p>{{ reviews|length }}</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col">
+                <p>You've not reviewed any books yet.</p>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
         <h3>Posted Reviews On The Following Books:</h3>
         <ul class="list-unstyled p-2">
-            <li class="mt-1 mb-1 p-1"><a href="">BOOK NAME</a></li>
-            <li class="mt-1 mb-1 p-1"><a href="">BOOK NAME</a></li>
-            <li class="mt-1 mb-1 p-1"><a href="">BOOK NAME</a></li>
-            <li class="mt-1 mb-1 p-1"><a href="">BOOK NAME</a></li>
+            {% for review in reviews %}
+            <li class="mt-1 mb-1 p-1"><a href="{% url 'view_book' review.book.id %}">{{ review.book.title }}</a></li>
+            {% empty %}
+            <li class="mt-1 mb-1 p-1">Such empty. Write a review, will ya!?</li>
+            {% endfor %}
         </ul>
     </div>
 </div>
