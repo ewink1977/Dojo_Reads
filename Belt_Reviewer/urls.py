@@ -11,5 +11,7 @@ urlpatterns = [
         path('books/add_book/process', views.process_new_book_review, name = 'proc_new_book'),
         path('books/<bookid>/', views.view_book, name = 'view_book'),
         path('books/<bookid>/addreview', views.review_existing_book, name = 'review_book'),
-        path('user/ID/', views.view_profile, name = 'user_profile'),
+        path('books/<reviewid>/confirm_delete', views.confirm_delete, name = 'confirm_delete_review'),
+        path('books/<reviewid>/delete', views.delete_review, name = 'delete_review'),
+        path('user/<userid>/', views.view_profile, name = 'user_profile'),
 	]

@@ -4,52 +4,58 @@
 
 <nav class="row align-items-center justify-content-between border-bottom p-1 mb-5">
     <div class="col-sm-4 align-self-center">
-        <h2><strong>Welcome, user.alais</strong></h2>
+        <h2><strong>Welcome, {{ user_info.alias }}</strong></h2>
     </div>
     <div class="col-sm-4 align-self-center">
-        <a href="">Home</a> | <a href="">Logout</a>
+        <a href="{% url 'book_reviews' %}">Home</a> | <a href="{% url 'logout' %}">Logout</a>
     </div>
 </nav>
 <div>
-    <h2>BOOK TITLE</h2>
-    <p class="lead ml-5">AUTHOR NAME</p>
+    <h2>{{ book_info.title }}</h2>
+    <p class="lead ml-5">{{ book_info.author.name }}</p>
 </div>
 <div class="row">
     <div class="col-md-6 ml-1">
         <h2>Reviews:</h2>
+        {% for review_obj in book_info.reviews.all %}
         <hr class="seperator">
         <ul class="list-unstyled ml-3 p-2">
-            <li class="mt-1 mb-1 p-1">Rating: STAR STAR STAR</li>
-            <li class="mt-1 mb-1 p-1"><a href="">USER</a> says: Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo accusantium doloremque quisquam modi magnam. In distinctio provident repellat, 
-                qui ipsum natus quia minima, facere quidem, quasi molestiae. Est, alias inventore.</li>
-            <li class="mt-1 mb-1 p-1">Posted on DATE</li>
+            {% if review_obj.rating == 1 %}
+            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
+            {% elif review_obj.rating == 2 %}
+            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
+            {% elif review_obj.rating == 3 %}
+            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
+            {% elif review_obj.rating == 4 %}
+            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i></li>
+            {% elif review_obj.rating == 5 %}
+            <li class="mt-1 mb-1 p-1">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></li>
+            {% endif %}
+            <li class="mt-1 mb-1 p-1"><a href="{% url 'user_profile' review_obj.user.id %}">{{ review_obj.user.alias }}</a> says: {{ review_obj.review }}</li>
         </ul>
-        <hr class="seperator">
-        <ul class="list-unstyled p-2">
-            <li>Rating: STAR STAR STAR</li>
-            <li>USER says: Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo accusantium doloremque quisquam modi magnam. In distinctio provident repellat, 
-                qui ipsum natus quia minima, facere quidem, quasi molestiae. Est, alias inventore.</li>
-            <li>Posted on DATE</li>
-        </ul>
-        <hr class="seperator">
-        <ul class="list-unstyled p-2">
-            <li>Rating: STAR STAR STAR</li>
-            <li>USER says: Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo accusantium doloremque quisquam modi magnam. In distinctio provident repellat, 
-                qui ipsum natus quia minima, facere quidem, quasi molestiae. Est, alias inventore.</li>
-            <li>Posted on DATE</li>
-        </ul>
-        <hr class="seperator">
+        <div class="row justify-content-between">
+            <div class="col-6 ml-5 mb-1 p-1">
+                Posted on {{ review_obj.created_at|date:"M j, Y"}}
+            </div>
+            {% if user_info.id == review_obj.user.id %}
+            <div class="col-4 mb-1 p-1">
+                <a href="{% url 'confirm_delete_review' review_obj.id %}">Delete This Review</a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
     </div>
     <div class="col-md-5">
         <h2>Add A Review!</h2>
         <form action="" method="POST">
             {% csrf_token %}
             <div class="form-group row">
+                <input type="hidden" name="bookid" value="{{ book_info.id }}">
                 <label for="bookreview" class="col-md-2 col-form-label">Review:</label>
                 <div class="col">
                     <textarea class="form-control" name="bookreview" id="bookreview" rows="6" aria-describedby="ReviewHelp"></textarea>
                     <small id="ReviewHelp" class="form-text text-muted">
-                        Please be as detailed as you'd like with the review! No spoliers though!
+                        Please be as detailed as you'd like with the review! No spoilers though!
                     </small>
                 </div>
             </div>
@@ -61,6 +67,8 @@
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
+                        <option value="4">Four</option>
+                        <option value="5">Five</option>
                     </select>
                 </div>
                 <div class="col text-right">

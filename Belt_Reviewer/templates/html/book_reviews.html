@@ -24,26 +24,23 @@
 <div class="row">
     <div class="col-lg-6">
         <h2 class="mt-2">Recent Book Reviews:</h2>
+        {% for review_obj in reviews|slice:":3" %}
         <hr class="reviews">
-        <h3 class="ml-3">Book Title Here</h3>
-        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i></p>
-        <p class="ml-5"><a href="">USER</a> says: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum aut nobis cumque fugiat, 
-            eveniet nihil illum ad omnis natus ullam! Fugit quo nulla inventore quis laboriosam deleniti, sapiente iusto consequuntur.</p>
-        <p class="ml-5 mb-2">Posted on DATE</p>
-        
-        <hr class="reviews">
-        <h3 class="ml-3">Book Title Here</h3>
-        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i></p>
-        <p class="ml-5"><a href="">USER</a> says: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum aut nobis cumque fugiat, 
-            eveniet nihil illum ad omnis natus ullam! Fugit quo nulla inventore quis laboriosam deleniti, sapiente iusto consequuntur.</p>
-        <p class="ml-5 mb-2">Posted on DATE</p>
-        
-        <hr class="reviews">
-        <h3 class="ml-3">Book Title Here</h3>
-        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i></p>
-        <p class="ml-5"><a href="">USER</a> says: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum aut nobis cumque fugiat, 
-            eveniet nihil illum ad omnis natus ullam! Fugit quo nulla inventore quis laboriosam deleniti, sapiente iusto consequuntur.</p>
-        <p class="ml-5 mb-2">Posted on DATE</p>
+        <h3 class="ml-3"><a href="{% url 'view_book' review_obj.book.id %}">{{ review_obj.book.title }}</a></h3>
+        {% if review_obj.rating == 1 %}
+        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></p>
+        {% elif review_obj.rating == 2 %}
+        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></p>
+        {% elif review_obj.rating == 3 %}
+        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i><i class="far fa-star text-warning"></i></p>
+        {% elif review_obj.rating == 4 %}
+        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="far fa-star text-warning"></i></p>
+        {% elif review_obj.rating == 5 %}
+        <p class="ml-5">Rating: <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
+        {% endif %}
+        <p class="ml-5"><a href="{% url 'user_profile' review_obj.user.id %}">{{ review_obj.user.alias }}</a> says: {{ review_obj.review }}</p>
+        <p class="ml-5 mb-2">Posted on {{ review_obj.created_at|date:"M j, Y"}}</p>
+        {% endfor %}
     </div>
     <div class="col-lg-6">
         <h2 class="border_bottom">Other Books With Reviews:</h2>

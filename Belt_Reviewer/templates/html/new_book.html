@@ -6,7 +6,7 @@
         <h2><strong>Welcome, {{ current_user.alias }}</strong></h2>
     </div>
     <div class="col-sm-4 align-self-center">
-        <a href="">Home</a> | <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'book_reviews' %}">Home</a> | <a href="{% url 'logout' %}">Logout</a>
     </div>
 </nav>
 <div class="row">
@@ -29,9 +29,9 @@
                         <div class="col-md-7">
                             <select class="custom-select col-md-9 form-control" name="bookauthorselect" id="bookauthorselect" aria-describedby="AuthorSelectHelp">
                                 <option selected value="-1">Choose An Author...</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                {% for author_obj in authors %}
+                                <option value="{{ author_obj.id }}">{{ author_obj.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                 <div class="col-md-8">
                 <textarea class="form-control" name="bookreview" id="bookreview" rows="6" minlength="10" aria-describedby="ReviewHelp"></textarea>
                 <small id="ReviewHelp" class="form-text text-muted">
-                    Please be as detailed as you'd like with the review! No spoliers though! Minimum of 10 characters in the review are required.
+                    Please be as detailed as you'd like with the review! No spoilers though! Minimum of 10 characters in the review are required.
                 </small>
                 </div>
             </div>
@@ -57,10 +57,10 @@
                 <select class="custom-select col-md-2" name="bookrating" id="bookrating">
                     <option selected>Pick A Rating!</option>
                     <option value="1">1 STAR!</option>
-                    <option value="2">2 STAR!</option>
-                    <option value="3">3 STAR!</option>
-                    <option value="4">4 STAR!</option>
-                    <option value="5">5 STAR!</option>
+                    <option value="2">2 STARS!</option>
+                    <option value="3">3 STARS!</option>
+                    <option value="4">4 STARS!</option>
+                    <option value="5">5 STARS!</option>
                 </select>
                 <div class="col-sm-10 text-right">
                     <button type="submit" class="btn btn-success">Add Book & Review</button>

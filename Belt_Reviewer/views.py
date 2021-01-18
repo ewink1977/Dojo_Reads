@@ -4,6 +4,7 @@ from .models import Users, Authors, Books, Reviews
 import bcrypt
 
 # User Management
+
 def home(request):
     context = {
         'page_title': 'DojoReads || Login or Register!'
@@ -52,8 +53,8 @@ def login(request):
                 messages.error(request, 'Unable to log in. The password you entered is incorrect.', extra_tags = 'danger')
                 return redirect('home')
         else:
-                messages.error(request, 'Unable to log in. The email you entered was not found in our system.', extra_tags = 'danger')
-                return redirect('home')
+            messages.error(request, 'Unable to log in. The email you entered was not found in our system.', extra_tags = 'danger')
+            return redirect('home')
     else:
         messages.error(request, 'Invalid request. Please register or log in.', extra_tags = 'danger')
         return redirect('home')
@@ -64,11 +65,13 @@ def logout(request):
     return redirect('home')
 
 # Book and Review VIEW Management
+
 def book_reviews(request):
     if request.session['loggedin'] == True:
         context = {
             'page_title': 'Recent Book Reviews!',
             'current_user': Users.objects.get(id = request.session['userid']),
+            'reviews': Reviews.objects.all().order_by("-created_at"),
         }
         return render(request, 'html/book_reviews.html', context)
     if request.session['loggedin'] == False:
@@ -84,14 +87,17 @@ def add_book_review(request):
     else:
         context = {
             'page_title': 'Add A Book & Review!',
-            'current_user': Users.objects.get(id = request.session['userid'])
+            'current_user': Users.objects.get(id = request.session['userid']),
+            'authors': Authors.objects.all()
         }
         return render(request, 'html/new_book.html', context)
 
 def view_book(request, bookid):
+    book_info = Books.objects.get(id = bookid)
     context = {
-        'page_title': 'BOOK TITLE | Reviews!',
-        'book_info': Books.objects.get(id = bookid),
+        'page_title': f'{book_info.title} | Reviews!',
+        'book_info': book_info,
+        'user_info': Users.objects.get(id = request.session['userid'])
     }
     return render(request, 'html/view_reviews.html', context)
 
@@ -101,10 +107,35 @@ def view_profile(request):
     }
     return render(request, 'html/user_profile.html', context)
 
+def confirm_delete(request, reviewid):
+    context = {
+        'review_id': reviewid
+    }
+    return render(request, 'html/confirm_delete.html', context)
+
 # Book and Review POST Management
 
 def review_existing_book(request):
-    pass
+    if request.method == 'POST':
+        review_errors = Reviews.objects.basic_validation(request.POST)
+        if len(review_errors) > 0:
+            for key, value in review_errors.items():
+                messages.error(request, value, extra_tags='danger')
+                return redirect('view_book', request.POST['bookid'])
+        book_reviewed = Books.objects.get(id = request.POST['bookid'])
+        user_reviewing = Users.objects.get(id = request.session['userid'])
+        Reviews.objects.create(
+            review = request.POST['bookreview'],
+            rating = request.POST['bookrating'],
+            user = user_reviewing,
+            book = book_reviewed
+        )
+        messages.success(request, f"Woot! You have reviewed {book_reviewed.title}!")
+        return redirect('view_book', request.POST['bookid'])
+    else:
+        messages.error(request, 'Invalid request. Returning you to the main page.', extra_tags = 'danger')
+        return redirect('book_reviews')
+
 
 def process_new_book_review(request):
     if request.method == 'POST':
@@ -150,3 +181,9 @@ def process_new_book_review(request):
     else:
         messages.error(request, 'Invalid request. Returning you to the main page.', extra_tags = 'danger')
         return redirect('book_reviews')
+
+def delete_review(request, reviewid):
+    review_to_destroy = Reviews.objects.get(id = reviewid)
+    review_to_destroy.delete()
+    messages.success(request, 'Welp, that review has successfully sent to the ether. Ja ni.')
+    return redirect('book_reviews')
