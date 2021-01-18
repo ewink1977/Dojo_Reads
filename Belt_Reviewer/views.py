@@ -26,3 +26,9 @@ def view_book(request):
 
 def review_existing_book(request):
     pass
+
+def view_profile(request):
+    context = {
+        'page_title': 'USER NAME | Profile!'
+    }
+    return render(request, 'html/user_profile.html', context)
